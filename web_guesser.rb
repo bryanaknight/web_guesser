@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
-SECRET_NUMBER = rand(100)
+secret_number = rand(100)
 @@guess_checker = 5
 
 get '/' do
@@ -11,16 +11,17 @@ get '/' do
 
   if @@guess_checker == 0
     check_counter
-    message = "you have #{@@guess_checker} guesses left"
+    message = "You lose! You now have #{@@guess_checker} new guesses."
   end 
 
-  erb :index, :locals => {:number => SECRET_NUMBER, :message => message, :color => color}
+  erb :index, :locals => {:number => secret_number, :message => message, :color => color}
 end
 
 def check_guess(guess)
   if guess.to_i == SECRET_NUMBER
+    secret_number = rand(100)
     @@guess_checker = 5
-    message = "You got it right"
+    message = "You got it right! Here are 5 more guesses"
   elsif guess.to_i > (SECRET_NUMBER + 5)
     @@guess_checker -= 1
     message = "Way too high. #{@@guess_checker} guesses left"
@@ -37,13 +38,13 @@ def check_guess(guess)
 end
 
 def check_color(message)
-  if message == "Way too high"
+  if message == "Way too high. #{@@guess_checker} guesses left"
     "red"
-  elsif message == "Way too low"
+  elsif message == "Way too low. #{@@guess_checker} guesses left"
     "blue"
-  elsif message == "too low"
+  elsif message == "too low. #{@@guess_checker} guesses left"
     "green"
-  elsif message == "too high"
+  elsif message == "too high. #{@@guess_checker} guesses left"
     "yellow"
   elsif message == "You got it right"
     "purple"
@@ -52,7 +53,6 @@ end
 
 def check_counter
   @@guess_checker = 5
-  "you have #{@@guess_checker} new guesses"
 end
 
 
